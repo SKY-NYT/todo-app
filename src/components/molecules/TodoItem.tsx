@@ -28,9 +28,6 @@ const TodoItem = memo(function TodoItem({
     () => onDelete(todo.id),
     [onDelete, todo.id],
   );
-
-  // Memoize sanitization — only re-runs when todo.text actually changes,
-  // not on every toggle/delete that updates other fields on the todo.
   const safeText = useMemo(() => DOMPurify.sanitize(todo.text), [todo.text]);
 
   return (

@@ -4,7 +4,7 @@ import { useTodoStore } from "@/store/useTodoStore";
 import type { Priority } from "@/types/todo";
 
 const TodoForm = memo(function TodoForm() {
-  // Granular selector: addTodo is a stable reference; we don't subscribe to todos/searchQuery/etc.
+
   const addTodo = useTodoStore((s) => s.addTodo);
   const [inputValue, setInputValue] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");

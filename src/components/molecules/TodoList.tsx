@@ -4,13 +4,10 @@ import TodoItem from "./TodoItem"
 import { useTodos } from "@/context/TodoContext"
 import type { Todo } from "@/types/todo"
 
-const ITEM_HEIGHT = 72   // px — matches p-3 card height
-const LIST_HEIGHT = 480  // px — visible window before scrolling kicks in
+const ITEM_HEIGHT = 72   
+const LIST_HEIGHT = 480  
 
-/**
- * VirtualRow — rendered by react-window for each visible row.
- * Must be memoised: FixedSizeList calls it on every scroll event.
- */
+
 interface RowData {
   items: Todo[]
   onToggle: (id: number) => void
@@ -27,24 +24,17 @@ const VirtualRow = memo(function VirtualRow({ index, style, data }: ListChildCom
   )
 })
 
-/**
- * TodoList — consumes filteredSortedTodos from context (already memoised).
- * Uses react-window FixedSizeList so only ~7 DOM nodes exist at once,
- * regardless of whether there are 50 or 5 000 todos.
- *
- * React.memo on TodoList itself prevents re-renders when unrelated
- * context slices (e.g. searchQuery keystroke) don't change filteredSortedTodos.
- */
+
 const TodoList = memo(function TodoList() {
   const { filteredSortedTodos, todos, toggleTodo, deleteTodo } = useTodos()
 
-  // Split active / completed — useMemo so it only reruns on list change
+
   const { incompleteTodos, completedTodos } = useMemo(() => ({
     incompleteTodos: filteredSortedTodos.filter((t) => !t.completed),
     completedTodos: filteredSortedTodos.filter((t) => t.completed),
   }), [filteredSortedTodos])
 
-  // Stable itemData objects — avoids FixedSizeList re-rendering all rows
+
   const activeItemData = useMemo<RowData>(
     () => ({ items: incompleteTodos, onToggle: toggleTodo, onDelete: deleteTodo }),
     [incompleteTodos, toggleTodo, deleteTodo]
@@ -55,7 +45,7 @@ const TodoList = memo(function TodoList() {
     [completedTodos, toggleTodo, deleteTodo]
   )
 
-  // Stable key extractor
+
   const itemKey = useCallback((index: number, data: RowData) => data.items[index].id, [])
 
   const activeHeight = Math.min(incompleteTodos.length * ITEM_HEIGHT, LIST_HEIGHT)
@@ -63,7 +53,7 @@ const TodoList = memo(function TodoList() {
 
   return (
     <div className="space-y-4">
-      {/* Active todos */}
+      
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-3">
           Active ({incompleteTodos.length})
@@ -86,7 +76,7 @@ const TodoList = memo(function TodoList() {
         )}
       </div>
 
-      {/* Completed todos */}
+      
       {completedTodos.length > 0 && (
         <div>
           <h2 className="text-xl font-semibold text-foreground mb-3">
@@ -105,7 +95,7 @@ const TodoList = memo(function TodoList() {
         </div>
       )}
 
-      {/* Empty state */}
+     
       {todos.length === 0 && (
         <div className="text-center py-8">
           <p className="text-muted-foreground">No todos yet. Add one to get started!</p>

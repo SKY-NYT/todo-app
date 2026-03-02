@@ -23,14 +23,35 @@ export function sortTodos(todos: Todo[], sortBy: SortBy): Todo[] {
 
 
 export function computeStats(todos: Todo[]): TodoStats {
-  const total = todos.length
-  const completed = todos.filter((t) => t.completed).length
-  const pending = total - completed
-  const completionPercentage = total > 0 ? Math.round((completed / total) * 100) : 0
-  const highCount = todos.filter((t) => t.priority === "high").length
-  const mediumCount = todos.filter((t) => t.priority === "medium").length
-  const lowCount = todos.filter((t) => t.priority === "low").length
-  return { total, completed, pending, completionPercentage, highCount, mediumCount, lowCount }
+  const stats = {
+    total: todos.length,
+    completed: 0,
+    pending: 0,
+    highCount: 0,
+    mediumCount: 0,
+    lowCount: 0,
+    completionPercentage: 0,
+  };
+
+  for (const todo of todos) {
+
+    if (todo.completed) {
+      stats.completed++;
+    } else {
+      stats.pending++;
+    }
+
+    
+    if (todo.priority === "high") stats.highCount++;
+    else if (todo.priority === "medium") stats.mediumCount++;
+    else if (todo.priority === "low") stats.lowCount++;
+  }
+
+  stats.completionPercentage = stats.total > 0 
+    ? Math.round((stats.completed / stats.total) * 100) 
+    : 0;
+
+  return stats;
 }
 
 export function computeAnalytics(todos: Todo[]): AnalyticsData {

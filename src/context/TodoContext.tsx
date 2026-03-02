@@ -8,7 +8,6 @@ import React, {
 import type { Priority, SortBy, Todo } from "@/types/todo"
 import { filterTodos, generateInitialTodos, sanitizeText, sortTodos } from "@/utils/todoUtils"
 
-// ─── State shape ────────────────────────────────────────────────────────────
 
 interface TodoState {
   todos: Todo[]
@@ -18,7 +17,7 @@ interface TodoState {
   filterTag: string | null
 }
 
-// ─── Actions ────────────────────────────────────────────────────────────────
+
 
 type TodoAction =
   | { type: "ADD_TODO"; text: string; priority: Priority }
@@ -28,7 +27,6 @@ type TodoAction =
   | { type: "SET_SORT"; sortBy: SortBy }
   | { type: "SET_FILTER_TAG"; tag: string | null }
 
-// ─── Reducer (pure — fully testable without React) ───────────────────────────
 
 function todoReducer(state: TodoState, action: TodoAction): TodoState {
   switch (action.type) {
@@ -77,7 +75,7 @@ function todoReducer(state: TodoState, action: TodoAction): TodoState {
   }
 }
 
-// ─── Initial state ───────────────────────────────────────────────────────────
+
 
 function buildInitialState(): TodoState {
   return {
@@ -89,19 +87,19 @@ function buildInitialState(): TodoState {
   }
 }
 
-// ─── Context value shape ─────────────────────────────────────────────────────
+
 
 export interface TodoContextValue {
-  // Raw state
+
   todos: Todo[]
   searchQuery: string
   sortBy: SortBy
   filterTag: string | null
 
-  // Derived / memoised data exposed as stable references
+
   filteredSortedTodos: Todo[]
 
-  // Stable action handlers (useCallback — never change identity between renders)
+
   addTodo: (text: string, priority: Priority) => void
   toggleTodo: (id: number) => void
   deleteTodo: (id: number) => void
@@ -110,16 +108,16 @@ export interface TodoContextValue {
   setFilterTag: (tag: string | null) => void
 }
 
-// ─── Context ─────────────────────────────────────────────────────────────────
+
 
 const TodoContext = createContext<TodoContextValue | null>(null)
 
-// ─── Provider ────────────────────────────────────────────────────────────────
+
 
 export function TodoProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(todoReducer, undefined, buildInitialState)
 
-  // Stable action dispatchers — useCallback ensures identity is preserved
+
   const addTodo = useCallback((text: string, priority: Priority) => {
     dispatch({ type: "ADD_TODO", text, priority })
   }, [])
@@ -144,7 +142,7 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: "SET_FILTER_TAG", tag })
   }, [])
 
-  // useMemo: only recomputes when todos / searchQuery / filterTag / sortBy change
+
   const filteredSortedTodos = useMemo(
     () => sortTodos(filterTodos(state.todos, state.searchQuery, state.filterTag), state.sortBy),
     [state.todos, state.searchQuery, state.filterTag, state.sortBy]
@@ -182,12 +180,7 @@ export function TodoProvider({ children }: { children: React.ReactNode }) {
   return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>
 }
 
-// ─── Public hook ─────────────────────────────────────────────────────────────
 
-/**
- * useTodos — consume the TodoContext from any component in the tree.
- * Throws a clear error if used outside <TodoProvider>.
- */
 export function useTodos(): TodoContextValue {
   const ctx = useContext(TodoContext)
   if (!ctx) throw new Error("useTodos must be used inside <TodoProvider>")

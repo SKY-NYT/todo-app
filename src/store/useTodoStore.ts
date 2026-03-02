@@ -1,9 +1,8 @@
-import { useMemo } from "react";
 import { create } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 import type { Priority, SortBy, Todo } from "@/types/todo";
+import { computeStats } from "@/utils/todoUtils";
 import {
-  computeStats,
   filterTodos,
   generateInitialTodos,
   sanitizeText,
@@ -65,9 +64,6 @@ export const useTodoStore = create<TodoStore>((set) => ({
   setFilterTag: (tag) => set({ filterTag: tag }),
 }));
 
-// useShallow performs element-by-element comparison on the returned array so the
-// subscriber only re-renders when the actual list contents change, not on every
-// unrelated store update.
 export const useFilteredSortedTodos = () =>
   useTodoStore(
     useShallow((state) =>
@@ -78,13 +74,9 @@ export const useFilteredSortedTodos = () =>
     ),
   );
 
-// Individual selectors → only re-subscribes Stats when todos or searchQuery change.
-// useMemo ensures computeStats only runs when those two values actually change.
-export const useTodoStats = () => {
-  const todos = useTodoStore((s) => s.todos);
-  const searchQuery = useTodoStore((s) => s.searchQuery);
-  return useMemo(
-    () => computeStats(filterTodos(todos, searchQuery, null)),
-    [todos, searchQuery],
+export const useTodoStats = () =>
+  useTodoStore(
+    useShallow((state) =>
+      computeStats(filterTodos(state.todos, state.searchQuery, null)),
+    ),
   );
-};

@@ -1,33 +1,39 @@
-import { memo, useState, useCallback } from "react"
-import { Button } from "@/components/atoms/button"
-import { useTodoStore } from "@/store/useTodoStore"
-import type { Priority } from "@/types/todo"
-
+import { memo, useState, useCallback } from "react";
+import { Button } from "@/components/atoms/button";
+import { useTodoStore } from "@/store/useTodoStore";
+import type { Priority } from "@/types/todo";
 
 const TodoForm = memo(function TodoForm() {
-  const { addTodo } = useTodoStore()
-  const [inputValue, setInputValue] = useState("")
-  const [priority, setPriority] = useState<Priority>("medium")
+  // Granular selector: addTodo is a stable reference; we don't subscribe to todos/searchQuery/etc.
+  const addTodo = useTodoStore((s) => s.addTodo);
+  const [inputValue, setInputValue] = useState("");
+  const [priority, setPriority] = useState<Priority>("medium");
 
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
-  }, [])
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setInputValue(e.target.value);
+    },
+    [],
+  );
 
-  const handlePriorityChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPriority(e.target.value as Priority)
-  }, [])
+  const handlePriorityChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setPriority(e.target.value as Priority);
+    },
+    [],
+  );
 
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+      e.preventDefault();
       if (inputValue.trim()) {
-        addTodo(inputValue, priority)
-        setInputValue("")
-        setPriority("medium")
+        addTodo(inputValue, priority);
+        setInputValue("");
+        setPriority("medium");
       }
     },
-    [addTodo, inputValue, priority]
-  )
+    [addTodo, inputValue, priority],
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2">
@@ -53,7 +59,7 @@ const TodoForm = memo(function TodoForm() {
         Add
       </Button>
     </form>
-  )
-})
+  );
+});
 
-export default TodoForm
+export default TodoForm;

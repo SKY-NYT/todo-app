@@ -1,9 +1,14 @@
 import { memo } from "react";
-// useTodoStats uses individual field selectors so Stats only re-renders
-// when `todos` or `searchQuery` actually change — not on sort/filter toggles.
-import { useTodoStats } from "@/store/useTodoStore";
+import { useTodoStore } from "@/store/useTodoStore";
+import { computeStats, filterTodos } from "@/utils/todoUtils";
+import { useShallow } from "zustand/react/shallow";
 
 const Stats = memo(function Stats() {
+
+  const stats = useTodoStore(
+    useShallow((s) => computeStats(filterTodos(s.todos, s.searchQuery, null))),
+  );
+
   const {
     total,
     completed,
@@ -12,7 +17,7 @@ const Stats = memo(function Stats() {
     highCount,
     mediumCount,
     lowCount,
-  } = useTodoStats();
+  } = stats;
 
   return (
     <div className="space-y-4 p-4 bg-card rounded-lg border border-border">

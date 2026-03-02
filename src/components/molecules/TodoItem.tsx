@@ -37,7 +37,7 @@ const TodoItem = memo(function TodoItem({ todo, onToggle, onDelete }: TodoItemPr
           
           {safeText}
         </span>
-        <div className="flex gap-2 mt-1 flex-wrap">
+        <div className="flex gap-2.5 mt-1 flex-wrap">
           <span className={`text-xs font-semibold ${PRIORITY_COLOR[todo.priority]}`}>
             {todo.priority.toUpperCase()}
           </span>

@@ -1,11 +1,7 @@
 import { memo } from "react"
 import { useTodos } from "@/context/TodoContext"
 
-/**
- * SearchBox reads searchQuery and setSearch directly from context.
- * No props needed → no prop-drilling.
- * Wrapped in React.memo so it only re-renders when its context slice changes.
- */
+
 const SearchBox = memo(function SearchBox() {
   const { searchQuery, setSearch } = useTodos()
 

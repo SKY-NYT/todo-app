@@ -3,13 +3,7 @@ import { Button } from "@/components/atoms/button"
 import { useTodos } from "@/context/TodoContext"
 import type { Priority } from "@/types/todo"
 
-/**
- * TodoForm — converted from class to functional component.
- * Reads addTodo from context (already useCallback-stable).
- * Local UI state (inputValue, priority) stays local — no need to lift it.
- * Wrapped in React.memo — won't re-render unless context.addTodo changes
- * (which never happens because it is useCallback([]) in the provider).
- */
+
 const TodoForm = memo(function TodoForm() {
   const { addTodo } = useTodos()
   const [inputValue, setInputValue] = useState("")

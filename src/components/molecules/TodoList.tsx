@@ -1,7 +1,7 @@
 import { memo, useMemo, useCallback } from "react"
 import { FixedSizeList, type ListChildComponentProps } from "react-window"
 import TodoItem from "./TodoItem"
-import { useTodos } from "@/context/TodoContext"
+import { useTodoStore } from "@/store/useTodoStore"
 import type { Todo } from "@/types/todo"
 
 const ITEM_HEIGHT = 72   
@@ -26,13 +26,13 @@ const VirtualRow = memo(function VirtualRow({ index, style, data }: ListChildCom
 
 
 const TodoList = memo(function TodoList() {
-  const { filteredSortedTodos, todos, toggleTodo, deleteTodo } = useTodos()
+  const { todos, toggleTodo, deleteTodo } = useTodoStore()
 
 
   const { incompleteTodos, completedTodos } = useMemo(() => ({
-    incompleteTodos: filteredSortedTodos.filter((t) => !t.completed),
-    completedTodos: filteredSortedTodos.filter((t) => t.completed),
-  }), [filteredSortedTodos])
+    incompleteTodos: todos.filter((t) => !t.completed),
+    completedTodos: todos.filter((t) => t.completed),
+  }), [todos])
 
 
   const activeItemData = useMemo<RowData>(

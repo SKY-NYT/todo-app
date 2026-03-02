@@ -1,9 +1,10 @@
 import { memo } from "react"
-import { useTodos } from "@/context/TodoContext"
+import {useTodoStore} from "@/store/useTodoStore"
+
 
 
 const SearchBox = memo(function SearchBox() {
-  const { searchQuery, setSearch } = useTodos()
+  const { searchQuery, setSearch } = useTodoStore()
 
   return (
     <div className="flex gap-2">

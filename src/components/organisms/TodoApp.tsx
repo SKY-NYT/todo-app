@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { TodoProvider } from "@/context/TodoContext"
+
 import TodoForm from "@/components/molecules/TodoForm"
 import SearchBox from "@/components/molecules/SearchBox"
 import Stats from "@/components/molecules/Stats"
@@ -8,7 +8,7 @@ import { ListSkeleton, AnalyticsSkeleton } from "@/components/molecules/Skeleton
 
 export function TodoApp() {
   return (
-    <TodoProvider>
+    
       <div className="min-h-screen bg-background">
         <div className="max-w-4xl mx-auto p-6">
           <header className="mb-8">
@@ -32,6 +32,5 @@ export function TodoApp() {
           </div>
         </div>
       </div>
-    </TodoProvider>
   )
 }

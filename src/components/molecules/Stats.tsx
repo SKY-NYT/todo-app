@@ -1,11 +1,11 @@
 import { memo, useMemo } from "react"
-import { useTodos } from "@/context/TodoContext"
+import { useTodoStore } from "@/store/useTodoStore"
 import { computeStats } from "@/utils/todoUtils"
 import { filterTodos } from "@/utils/todoUtils"
 
 
 const Stats = memo(function Stats() {
-  const { todos, searchQuery } = useTodos()
+  const { todos, searchQuery } = useTodoStore()
 
   
   const stats = useMemo(() => {

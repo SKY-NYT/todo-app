@@ -1,10 +1,10 @@
 import { memo, useMemo, useCallback } from "react"
-import { useTodos } from "@/context/TodoContext"
+import { useTodoStore } from "@/store/useTodoStore"
 import { computeAnalytics } from "@/utils/todoUtils"
 
 
 const TodoAnalytics = memo(function TodoAnalytics() {
-  const { todos, sortBy, filterTag, setSort, setFilterTag } = useTodos()
+  const { todos, sortBy, filterTag, setSort, setFilterTag } = useTodoStore()
 
 
   const { allTags, priorityDistribution, completionByTag } = useMemo(

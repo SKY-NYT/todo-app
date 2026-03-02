@@ -1,11 +1,11 @@
 import { memo, useState, useCallback } from "react"
 import { Button } from "@/components/atoms/button"
-import { useTodos } from "@/context/TodoContext"
+import { useTodoStore } from "@/store/useTodoStore"
 import type { Priority } from "@/types/todo"
 
 
 const TodoForm = memo(function TodoForm() {
-  const { addTodo } = useTodos()
+  const { addTodo } = useTodoStore()
   const [inputValue, setInputValue] = useState("")
   const [priority, setPriority] = useState<Priority>("medium")
 

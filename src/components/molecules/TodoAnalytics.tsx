@@ -2,28 +2,24 @@ import { memo, useMemo, useCallback } from "react"
 import { useTodos } from "@/context/TodoContext"
 import { computeAnalytics } from "@/utils/todoUtils"
 
-/**
- * TodoAnalytics — memoised component.
- * All expensive reduce chains are cached with useMemo.
- * Sort/filter handlers come from context (already useCallback-stable).
- */
+
 const TodoAnalytics = memo(function TodoAnalytics() {
   const { todos, sortBy, filterTag, setSort, setFilterTag } = useTodos()
 
-  // useMemo: analytics only recompute when todos array changes
+
   const { allTags, priorityDistribution, completionByTag } = useMemo(
     () => computeAnalytics(todos),
     [todos]
   )
 
-  // useCallback: sort handler — stable identity, safe for child memo
+ 
   const handleSortDate = useCallback(() => setSort("date"), [setSort])
   const handleSortPriority = useCallback(() => setSort("priority"), [setSort])
   const handleFilterAll = useCallback(() => setFilterTag(null), [setFilterTag])
 
   return (
     <div className="space-y-6 p-4 bg-card rounded-lg border border-border">
-      {/* Priority distribution */}
+     
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-3">Priority Distribution</h3>
         <div className="grid grid-cols-3 gap-4">
@@ -36,7 +32,7 @@ const TodoAnalytics = memo(function TodoAnalytics() {
         </div>
       </div>
 
-      {/* Sort options */}
+     
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-3">Sort Options</h3>
         <div className="flex gap-2">
@@ -63,7 +59,7 @@ const TodoAnalytics = memo(function TodoAnalytics() {
         </div>
       </div>
 
-      {/* Tag filters */}
+    
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-3">Filter by Tags</h3>
         <div className="flex flex-wrap gap-2">
@@ -78,7 +74,7 @@ const TodoAnalytics = memo(function TodoAnalytics() {
             All
           </button>
           {Object.entries(allTags).map(([tag, count]) => (
-            // TagButton extracted inline — each tag gets its own stable callback via useMemo key
+            
             <TagFilterButton
               key={tag}
               tag={tag}
@@ -90,7 +86,7 @@ const TodoAnalytics = memo(function TodoAnalytics() {
         </div>
       </div>
 
-      {/* Completion by tag */}
+     
       <div>
         <h3 className="text-lg font-semibold text-foreground mb-3">Completion Rate by Tag</h3>
         <div className="space-y-2">
@@ -112,10 +108,7 @@ const TodoAnalytics = memo(function TodoAnalytics() {
   )
 })
 
-/**
- * TagFilterButton — memoised sub-component.
- * Isolates the useCallback per-tag so the parent doesn't create inline handlers.
- */
+
 interface TagFilterButtonProps {
   tag: string
   count: number

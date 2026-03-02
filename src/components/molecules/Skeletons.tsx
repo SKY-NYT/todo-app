@@ -4,10 +4,7 @@ interface ListSkeletonProps {
   rows?: number
 }
 
-/**
- * ListSkeleton — shown by Suspense while lazy chunks are loading.
- * Animated pulse keeps the UI feeling alive during code-split loading.
- */
+
 export const ListSkeleton = memo(function ListSkeleton({ rows = 5 }: ListSkeletonProps) {
   return (
     <div className="space-y-2 animate-pulse" aria-busy="true" aria-label="Loading todos">

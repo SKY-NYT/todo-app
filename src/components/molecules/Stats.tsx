@@ -3,15 +3,11 @@ import { useTodos } from "@/context/TodoContext"
 import { computeStats } from "@/utils/todoUtils"
 import { filterTodos } from "@/utils/todoUtils"
 
-/**
- * Stats — memoised, reads only the slices it needs from context.
- * Heavy calculations are wrapped in useMemo so they only rerun when
- * todos or searchQuery actually change.
- */
+
 const Stats = memo(function Stats() {
   const { todos, searchQuery } = useTodos()
 
-  // useMemo: filter + compute stats only when dependencies change
+  
   const stats = useMemo(() => {
     const filtered = filterTodos(todos, searchQuery, null)
     return computeStats(filtered)
@@ -47,7 +43,7 @@ const Stats = memo(function Stats() {
             <span className="text-sm text-muted-foreground">{completionPercentage}%</span>
           </div>
           <div className="w-full bg-muted rounded-full h-3">
-            <div
+            <div aria-label="Completion progress"
               className="bg-primary h-3 rounded-full transition-all duration-300"
               style={{ width: `${completionPercentage}%` }}
               role="progressbar"

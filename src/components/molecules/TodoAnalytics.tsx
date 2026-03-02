@@ -1,40 +1,57 @@
-import { memo, useMemo, useCallback } from "react"
-import { useTodoStore } from "@/store/useTodoStore"
-import { computeAnalytics } from "@/utils/todoUtils"
-
+import { memo, useMemo, useCallback } from "react";
+import { useTodoStore } from "@/store/useTodoStore";
+import { useShallow } from "zustand/react/shallow";
+import { computeAnalytics } from "@/utils/todoUtils";
 
 const TodoAnalytics = memo(function TodoAnalytics() {
-  const { todos, sortBy, filterTag, setSort, setFilterTag } = useTodoStore()
-
+  // useShallow performs a shallow-equal comparison of this slice so the component
+  // only re-renders when one of these specific fields changes.
+  const { todos, sortBy, filterTag, setSort, setFilterTag } = useTodoStore(
+    useShallow((s) => ({
+      todos: s.todos,
+      sortBy: s.sortBy,
+      filterTag: s.filterTag,
+      setSort: s.setSort,
+      setFilterTag: s.setFilterTag,
+    })),
+  );
 
   const { allTags, priorityDistribution, completionByTag } = useMemo(
     () => computeAnalytics(todos),
-    [todos]
-  )
+    [todos],
+  );
 
- 
-  const handleSortDate = useCallback(() => setSort("date"), [setSort])
-  const handleSortPriority = useCallback(() => setSort("priority"), [setSort])
-  const handleFilterAll = useCallback(() => setFilterTag(null), [setFilterTag])
+  const handleSortDate = useCallback(() => setSort("date"), [setSort]);
+  const handleSortPriority = useCallback(() => setSort("priority"), [setSort]);
+  const handleFilterAll = useCallback(() => setFilterTag(null), [setFilterTag]);
 
   return (
     <div className="space-y-6 p-4 bg-card rounded-lg border border-border">
-     
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-3">Priority Distribution</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-3">
+          Priority Distribution
+        </h3>
         <div className="grid grid-cols-3 gap-4">
           {Object.entries(priorityDistribution).map(([priority, count]) => (
-            <div key={priority} className="text-center p-3 bg-background rounded-lg">
-              <div className="text-2xl font-bold capitalize text-primary">{count}</div>
-              <div className="text-xs text-muted-foreground capitalize">{priority}</div>
+            <div
+              key={priority}
+              className="text-center p-3 bg-background rounded-lg"
+            >
+              <div className="text-2xl font-bold capitalize text-primary">
+                {count}
+              </div>
+              <div className="text-xs text-muted-foreground capitalize">
+                {priority}
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-     
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-3">Sort Options</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-3">
+          Sort Options
+        </h3>
         <div className="flex gap-2">
           <button
             onClick={handleSortDate}
@@ -59,9 +76,10 @@ const TodoAnalytics = memo(function TodoAnalytics() {
         </div>
       </div>
 
-    
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-3">Filter by Tags</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-3">
+          Filter by Tags
+        </h3>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={handleFilterAll}
@@ -74,7 +92,6 @@ const TodoAnalytics = memo(function TodoAnalytics() {
             All
           </button>
           {Object.entries(allTags).map(([tag, count]) => (
-            
             <TagFilterButton
               key={tag}
               tag={tag}
@@ -86,9 +103,10 @@ const TodoAnalytics = memo(function TodoAnalytics() {
         </div>
       </div>
 
-     
       <div>
-        <h3 className="text-lg font-semibold text-foreground mb-3">Completion Rate by Tag</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-3">
+          Completion Rate by Tag
+        </h3>
         <div className="space-y-2">
           {Object.entries(completionByTag).map(([tag, percentage]) => (
             <div key={tag} className="flex items-center gap-2">
@@ -99,25 +117,31 @@ const TodoAnalytics = memo(function TodoAnalytics() {
                   style={{ width: `${percentage}%` }}
                 />
               </div>
-              <span className="text-sm font-semibold text-foreground w-12">{percentage}%</span>
+              <span className="text-sm font-semibold text-foreground w-12">
+                {percentage}%
+              </span>
             </div>
           ))}
         </div>
       </div>
     </div>
-  )
-})
-
+  );
+});
 
 interface TagFilterButtonProps {
-  tag: string
-  count: number
-  active: boolean
-  onFilter: (tag: string | null) => void
+  tag: string;
+  count: number;
+  active: boolean;
+  onFilter: (tag: string | null) => void;
 }
 
-const TagFilterButton = memo(function TagFilterButton({ tag, count, active, onFilter }: TagFilterButtonProps) {
-  const handleClick = useCallback(() => onFilter(tag), [onFilter, tag])
+const TagFilterButton = memo(function TagFilterButton({
+  tag,
+  count,
+  active,
+  onFilter,
+}: TagFilterButtonProps) {
+  const handleClick = useCallback(() => onFilter(tag), [onFilter, tag]);
   return (
     <button
       onClick={handleClick}
@@ -129,7 +153,7 @@ const TagFilterButton = memo(function TagFilterButton({ tag, count, active, onFi
     >
       {tag} ({count})
     </button>
-  )
-})
+  );
+});
 
-export default TodoAnalytics
+export default TodoAnalytics;

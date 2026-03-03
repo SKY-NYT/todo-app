@@ -2,14 +2,7 @@ import { memo, useCallback } from "react";
 import { useTodoStore } from "@/store/useTodoStore";
 import { useShallow } from "zustand/react/shallow";
 
-// ─── Sub-components with targeted selectors ───────────────────────────────────
-// Each subscribes only to the slice it needs, so a toggle (which only changes
-// `completed`) never re-renders PriorityDistribution, SortOptions, or TagFilter.
 
-/**
- * Does NOT re-render on toggle — priority counts are unaffected by completion.
- * useShallow compares { low, medium, high } by primitive value.
- */
 const PriorityDistribution = memo(function PriorityDistribution() {
   const dist = useTodoStore(
     useShallow((s) =>
@@ -42,10 +35,7 @@ const PriorityDistribution = memo(function PriorityDistribution() {
   );
 });
 
-/**
- * Does NOT re-render on toggle — only cares about sortBy (a primitive).
- * Zustand's built-in Object.is comparison handles primitives perfectly.
- */
+
 const SortOptions = memo(function SortOptions() {
   const sortBy = useTodoStore((s) => s.sortBy);
   const setSort = useTodoStore((s) => s.setSort);
@@ -84,10 +74,7 @@ const SortOptions = memo(function SortOptions() {
   );
 });
 
-/**
- * Does NOT re-render on toggle — tag membership does not change when completing.
- * useShallow compares tag-count entries by primitive value.
- */
+
 const TagFilter = memo(function TagFilter() {
   const filterTag = useTodoStore((s) => s.filterTag);
   const setFilterTag = useTodoStore((s) => s.setFilterTag);
@@ -134,11 +121,7 @@ const TagFilter = memo(function TagFilter() {
   );
 });
 
-/**
- * RE-RENDERS on toggle — completion percentages legitimately change.
- * useShallow compares tag-percentage entries by primitive value so it still
- * skips re-renders for toggles on tags whose percentage didn't change.
- */
+
 const CompletionByTag = memo(function CompletionByTag() {
   const completionByTag = useTodoStore(
     useShallow((s) => {
@@ -179,7 +162,7 @@ const CompletionByTag = memo(function CompletionByTag() {
   );
 });
 
-// ─── Tag filter button ────────────────────────────────────────────────────────
+
 
 interface TagFilterButtonProps {
   tag: string;
@@ -209,7 +192,7 @@ const TagFilterButton = memo(function TagFilterButton({
   );
 });
 
-// ─── Shell (never re-renders itself — all state lives in sub-components) ──────
+
 
 const TodoAnalytics = memo(function TodoAnalytics() {
   return (

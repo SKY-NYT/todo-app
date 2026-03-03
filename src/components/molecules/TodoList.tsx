@@ -28,11 +28,10 @@ const VirtualRow = memo(function VirtualRow({
 });
 
 const TodoList = memo(function TodoList() {
-  // useFilteredSortedTodos already applies search/filter/sort with useShallow
-  // so this component only re-renders when the visible list actually changes.
+ 
   const todos = useFilteredSortedTodos();
 
-  // Stable action references — Zustand actions never change identity
+
   const toggleTodo = useTodoStore((s) => s.toggleTodo);
   const deleteTodo = useTodoStore((s) => s.deleteTodo);
 

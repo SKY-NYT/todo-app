@@ -2,7 +2,7 @@ import { memo, useCallback } from "react";
 import { useTodoStore } from "@/store/useTodoStore";
 
 const SearchBox = memo(function SearchBox() {
-  // Granular selectors: changing sortBy/filterTag/todos won't re-render this
+
   const searchQuery = useTodoStore((s) => s.searchQuery);
   const setSearch = useTodoStore((s) => s.setSearch);
 

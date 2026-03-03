@@ -1,15 +1,23 @@
-import { memo } from "react"
+import { memo } from "react";
 
 interface ListSkeletonProps {
-  rows?: number
+  rows?: number;
 }
 
-
-export const ListSkeleton = memo(function ListSkeleton({ rows = 5 }: ListSkeletonProps) {
+export const ListSkeleton = memo(function ListSkeleton({
+  rows = 5,
+}: ListSkeletonProps) {
   return (
-    <div className="space-y-2 animate-pulse" aria-busy="true" aria-label="Loading todos">
+    <div
+      className="space-y-2 animate-pulse"
+      aria-busy="true"
+      aria-label="Loading todos"
+    >
       {Array.from({ length: rows }).map((_, i) => (
-        <div key={i} className="flex items-center gap-3 p-3 bg-card rounded-lg border border-border">
+        <div
+          key={i}
+          className="flex items-center gap-3 p-3 bg-card rounded-lg border border-border"
+        >
           <div className="w-5 h-5 bg-muted rounded" />
           <div className="flex-1 space-y-2">
             <div className="h-4 bg-muted rounded w-3/4" />
@@ -19,12 +27,15 @@ export const ListSkeleton = memo(function ListSkeleton({ rows = 5 }: ListSkeleto
         </div>
       ))}
     </div>
-  )
-})
+  );
+});
 
 export const AnalyticsSkeleton = memo(function AnalyticsSkeleton() {
   return (
-    <div className="space-y-4 p-4 bg-card rounded-lg border border-border animate-pulse" aria-busy="true">
+    <div
+      className="space-y-4 p-4 bg-card rounded-lg border border-border animate-pulse"
+      aria-busy="true"
+    >
       <div className="grid grid-cols-3 gap-4">
         {[0, 1, 2].map((i) => (
           <div key={i} className="text-center p-3 bg-background rounded-lg">
@@ -43,5 +54,5 @@ export const AnalyticsSkeleton = memo(function AnalyticsSkeleton() {
         ))}
       </div>
     </div>
-  )
-})
+  );
+});
